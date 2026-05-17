@@ -32,3 +32,18 @@ def enviar_config(temp, hum):
         return True
     except:
         return False
+    
+# ---------------------------------------------------
+# Esta función obtiene solo los parámetros configurables
+# del ESP32 (tempMax y humedadMin) sin traer los datos
+# de los sensores.
+#
+# Retorna: Diccionario JSON con los parámetros si todo
+# va bien, o None si ocurre un error de conexión
+# ---------------------------------------------------
+def obtener_params():
+    try:
+        r = requests.get(f"{ESP32_IP}/params", timeout=2)
+        return r.json()
+    except:
+        return None
