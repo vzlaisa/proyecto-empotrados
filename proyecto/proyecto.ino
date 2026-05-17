@@ -65,8 +65,8 @@ float TEMP_MAX = 40;
 int HUMEDAD_MIN = 40;
 
 // ----------- WIFI -----------
-const char* ssid = "MEGACABLE-2.4G-17AB";
-const char* password = "DbAdXdzq53";
+const char* ssid = "MEGACABLE-2.4G-FCA5";
+const char* password = "R54tgjp3nD";
 
 AsyncWebServer server(80);
 
@@ -109,7 +109,19 @@ void configurarAPI() {
     json += "\"temperatura\":" + String(temperatura) + ",";
     json += "\"humedadSuelo\":" + String(humedadPorcentaje) + ",";
     json += "\"luz\":" + String(luzPorcentaje) + ",";
-    json += "\"humedadAmbiente\":" + String(humedadAmbiente);
+    json += "\"humedadAmbiente\":" + String(humedadAmbiente) + ",";
+    json += "\"tempMax\":" + String(TEMP_MAX) + ",";
+    json += "\"humedadMin\":" + String(HUMEDAD_MIN);
+    json += "}";
+
+    request->send(200, "application/json", json);
+  });
+
+  server.on("/params", HTTP_GET, [](AsyncWebServerRequest* request) {
+
+    String json = "{";
+    json += "\"tempMax\":" + String(TEMP_MAX) + ",";
+    json += "\"humedadMin\":" + String(HUMEDAD_MIN);
     json += "}";
 
     request->send(200, "application/json", json);
