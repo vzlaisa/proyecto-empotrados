@@ -1,273 +1,360 @@
 <!DOCTYPE html>
 <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Monitor de cuidado de planta</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Monitor de cuidado de planta</title>
+        <!-- Bootstrap y Google Fonts -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap y Google Fonts -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --bg-color: #f4f4f4;
+                --card-bg: #ffffff;
+                --primary-green: #2ecc71;
+                --accent-green: #27ae60;
+                --danger-red: #e74c3c;
+                --text-dark: #2c3e50;
 
-    <style>
-        :root {
-            --bg-color: #f4f4f4;
-            --card-bg: #ffffff;
-            --primary-green: #2ecc71;
-            --accent-green: #27ae60;
-            --danger-red: #e74c3c;
-            --text-dark: #2c3e50;
+                --ok-bg: #d4edda;
+                --ok-text: #155724;
+                --ok-border: #c3e6cb;
 
-            --ok-bg: #d4edda;
-            --ok-text: #155724;
-            --ok-border: #c3e6cb;
+                --alert-bg: #f8d7da;
+                --alert-text: #721c24;
+                --alert-border: #f5c6cb;
 
-            --alert-bg: #f8d7da;
-            --alert-text: #721c24;
-            --alert-border: #f5c6cb;
+                --info-bg: #e7f3ff;
+            }
 
-            --info-bg: #e7f3ff;
-        }
+            body {
+                background-color: var(--bg-color);
+                font-family: 'Inter', sans-serif;
+                color: var(--text-dark);
+            }
 
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-dark);
-        }
+            .main-container {
+                max-width: 900px;
+                margin-top: 30px;
+            }
 
-        .main-container {
-            max-width: 900px;
-            margin-top: 30px;
-        }
+            /* --- ESTADO --- */
+            #contenedorEstado {
+                margin-bottom: 25px;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+                transition: all 0.5s ease;
+            }
 
-        /* --- Estilo de estado --- */
-        #contenedorEstado {
-            margin-bottom: 25px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.5s ease;
-        }
+            .estado-header {
+                padding: 10px 20px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
-        .estado-header {
-            padding: 10px 20px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+            .estado-body {
+                background-color: var(--card-bg);
+                padding: 20px;
+                text-align: center;
+                font-weight: 700;
+                font-size: 1.4rem;
+                border: 1px solid transparent;
+                border-top: none;
+            }
 
-        .estado-body {
-            background-color: var(--card-bg);
-            padding: 20px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 1.4rem;
-            border: 1px solid transparent;
-            border-top: none;
-        }
+            .status-ok .estado-header {
+                background-color: var(--ok-bg);
+                color: var(--ok-text);
+                border: 1px solid var(--ok-border);
+            }
 
-        .status-ok .estado-header {
-            background-color: var(--ok-bg);
-            color: var(--ok-text);
-            border: 1px solid var(--ok-border);
-        }
+            .status-ok .estado-body {
+                color: var(--accent-green);
+                border: 1px solid var(--ok-border);
+                border-top: none;
+            }
 
-        .status-ok .estado-body {
-            color: var(--accent-green);
-            border: 1px solid var(--ok-border);
-            border-top: none;
-        }
+            .status-alert .estado-header {
+                background-color: var(--alert-bg);
+                color: var(--alert-text);
+                border: 1px solid var(--alert-border);
+            }
 
-        .status-alert .estado-header {
-            background-color: var(--alert-bg);
-            color: var(--alert-text);
-            border: 1px solid var(--alert-border);
-        }
+            .status-alert .estado-body {
+                color: var(--danger-red);
+                border: 1px solid var(--alert-border);
+                border-top: none;
+            }
 
-        .status-alert .estado-body {
-            color: var(--danger-red);
-            border: 1px solid var(--alert-border);
-            border-top: none;
-        }
+            /* --- TARJETAS --- */
+            .card-custom {
+                border: none;
+                border-radius: 20px;
+                padding: 25px;
+                background: var(--card-bg);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+                height: 100%;
+            }
 
-        /* --- Tarjetas --- */
-        .card-custom {
-            border: none;
-            border-radius: 20px;
-            padding: 25px;
-            background: var(--card-bg);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            height: 100%;
-        }
+            .card-custom i {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+                color: var(--primary-green);
+            }
 
-        .card-custom i {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: var(--primary-green);
-        }
+            .value-text {
+                font-size: 1.8rem;
+                font-weight: 600;
+            }
 
-        .value-text {
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
+            /* --- CONFIG --- */
+            .config-box {
+                background: #ffffff;
+                border-radius: 20px;
+                border-left: 6px solid var(--primary-green);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            }
 
-        .config-box {
-            background: #ffffff;
-            border-radius: 20px;
-            border-left: 6px solid var(--primary-green);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
+            .instruccion-config {
+                border-radius: 12px;
+                background-color: var(--info-bg);
+                border: none;
+            }
 
-        /* --- Estilo de la instrucción --- */
-        .instruccion-config {
-            border-radius: 12px;
-            background-color: var(--info-bg);
-            border: none;
-        }
+            .btn-save {
+                background-color: var(--primary-green);
+                border: none;
+                border-radius: 10px;
+                padding: 10px 25px;
+                font-weight: 600;
+                color: white;
+            }
 
-        .btn-save {
-            background-color: var(--primary-green);
-            border: none;
-            border-radius: 10px;
-            padding: 10px 25px;
-            font-weight: 600;
-            color: white;
-        }
-    </style>
-</head>
+            .btn-save:hover {
+                background-color: var(--accent-green);
+            }
+        </style>
+    </head>
 
-<body>
+    <body>
+        <div class="container main-container px-4 py-5">
 
-    <div class="container main-container px-4 py-5">
+            <!-- TITULO -->
+            <header class="text-center mb-4">
+                <h1 class="fw-bold">Monitor de cuidado de planta</h1>
 
-        <header class="text-center mb-4">
-            <h1 class="fw-bold">Monitor de cuidado de planta</h1>
-            <p class="text-muted small pb-4">Datos actualizados en tiempo real</p>
-        </header>
+                <p class="text-muted small pb-4">Datos actualizados en tiempo real</p>
+            </header>
 
-        <!-- SECCIÓN DE ESTADO -->
-        <div id="contenedorEstado" class="status-ok">
-            <div class="estado-header">
-                <i id="iconoEstado" class="fas fa-exclamation-triangle me-2"></i>
-                <span id="tituloEstado">INFORMACIÓN</span>
+            <!-- ESTADO -->
+            <div id="contenedorEstado" class="status-ok">
+                <div class="estado-header">
+                    <i id="iconoEstado" class="fas fa-exclamation-triangle me-2"></i>
+
+                    <span id="tituloEstado">INFORMACIÓN</span>
+                </div>
+
+                <div id="textoEstado" class="estado-body">
+                    Cargando...
+                </div>
             </div>
-            <div id="textoEstado" class="estado-body">
-                Cargando...
+
+            <!-- TARJETAS -->
+            <div class="row g-3 mb-5 text-center">
+                <div class="col-6 col-md-3">
+                    <div class="card-custom p-4">
+                        <i class="fas fa-thermometer-half"></i>
+                        
+                        <p class="text-muted small mb-1">Temperatura</p>
+
+                        <h3 id="temp" class="value-text">--</h3>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="card-custom p-4">
+                        <i class="fas fa-tint"></i>
+
+                        <p class="text-muted small mb-1">Humedad aire</p>
+
+                        <h3 id="humAmb" class="value-text">--</h3>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="card-custom p-4">
+                        <i class="fas fa-seedling"></i>
+
+                        <p class="text-muted small mb-1">Humedad suelo</p>
+
+                        <h3 id="humSuelo" class="value-text">--</h3>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="card-custom p-4">
+                        <i class="fas fa-sun"></i>
+
+                        <p class="text-muted small mb-1">Luz solar</p>
+
+                        <h3 id="luz" class="value-text">--</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONFIGURACION -->
+            <div class="config-box p-5 mb-5">
+                <h5 class="mb-4 fw-bold">
+                    <i class="fas fa-sliders-h me-2"></i>
+                    Parámetros configurables
+                </h5>
+
+                <div class="alert alert-info instruccion-config shadow-sm mb-4">
+                    <i class="fas fa-info-circle me-2 text-primary"></i>
+
+                    <strong>Instrucciones:</strong>
+                    Define los límites de seguridad para tu planta.
+                    Si la temperatura sube del máximo o la humedad baja
+                    del mínimo, se activará la alarma sonora y/o visual.
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">HUMEDAD MÍNIMA (%)</label>
+
+                        <input type="number" id="humMin" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">TEMPERATURA MÁXIMA (°C)</label>
+
+                        <input type="number" id="tempMax" class="form-control">
+                    </div>
+
+                    <div class="col-12 text-end mt-4">
+                        <button class="btn btn-save" onclick="guardarConfig()">
+                            <i class="fas fa-save me-1"></i>Guardar cambios
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- TARJETAS DE DATOS -->
-        <div class="row g-3 mb-5 text-center">
-            <div class="col-6 col-md-3">
-                <div class="card-custom p-4">
-                    <i class="fas fa-thermometer-half"></i>
-                    <p class="text-muted small mb-1">Temperatura</p>
-                    <h3 id="temp" class="value-text">--</h3>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="card-custom p-4">
-                    <i class="fas fa-tint"></i>
-                    <p class="text-muted small mb-1">Humedad aire</p>
-                    <h3 id="humAmb" class="value-text">--</h3>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="card-custom p-4">
-                    <i class="fas fa-seedling"></i>
-                    <p class="text-muted small mb-1">Humedad suelo</p>
-                    <h3 id="humSuelo" class="value-text">--</h3>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="card-custom p-4">
-                    <i class="fas fa-sun"></i>
-                    <p class="text-muted small mb-1">Luz solar</p>
-                    <h3 id="luz" class="value-text">--</h3>
-                </div>
-            </div>
-        </div>
+        <script>
+            // Detectar si el usuario está editando un campo
+            let camposEnFoco = 0;
 
-        <!-- CONFIGURACIÓN -->
-        <div class="config-box p-5 mb-5">
-            <h5 class="mb-4 fw-bold"><i class="fas fa-sliders-h me-2"></i> Parámetros configurables</h5>
+            document.getElementById("tempMax").addEventListener("focus", () => camposEnFoco++);
+            document.getElementById("tempMax").addEventListener("blur",  () => camposEnFoco--);
+            document.getElementById("humMin").addEventListener("focus",  () => camposEnFoco++);
+            document.getElementById("humMin").addEventListener("blur",   () => camposEnFoco--);
 
-            <div class="alert alert-info instruccion-config shadow-sm mb-4">
-                <i class="fas fa-info-circle me-2 text-primary"></i>
-                <strong>Instrucciones:</strong> Define los límites de seguridad para tu planta.
-                Si la temperatura sube del máximo o la humedad baja del mínimo, se activará la alarma sonora y/o visual.
-            </div>
+            // ACTUALIZAR SENSORES
+            function actualizarDatos() {
+                fetch('/datos')
+                    .then(res => res.json())
+                    .then(data => {
 
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label small fw-bold">HUMEDAD MÍNIMA (%)</label>
-                    <input type="number" id="humMin" class="form-control" value="40">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label small fw-bold">TEMPERATURA MÁXIMA (°C)</label>
-                    <input type="number" id="tempMax" class="form-control" value="30">
-                </div>
-                <div class="col-12 text-end mt-4">
-                    <button class="btn btn-save" onclick="guardarConfig()">
-                        <i class="fas fa-save me-1"></i> Guardar cambios
-                    </button>
-                </div>
-            </div>
-        </div>
+                        // TARJETAS
+                        document.getElementById("temp").innerText =
+                            data.temperatura + "°";
 
-    </div>
+                        document.getElementById("humSuelo").innerText =
+                            data.humedadSuelo + "%";
 
-    <script>
-        function actualizarDatos() {
-            fetch('/datos')
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById("temp").innerText = data.temperatura + "°";
-                    document.getElementById("humSuelo").innerText = data.humedadSuelo + "%";
-                    document.getElementById("luz").innerText = data.luz + "%";
-                    document.getElementById("humAmb").innerText = data.humedadAmbiente + "%";
+                        document.getElementById("luz").innerText =
+                            data.luz + "%";
 
-                    const contenedor = document.getElementById("contenedorEstado");
-                    const texto = document.getElementById("textoEstado");
-                    const titulo = document.getElementById("tituloEstado");
-                    const icono = document.getElementById("iconoEstado");
-                    const estado = data.estado;
+                        document.getElementById("humAmb").innerText =
+                            data.humedadAmbiente + "%";
 
-                    texto.innerText = estado;
+                        // ESTADO
+                        const contenedor =
+                            document.getElementById("contenedorEstado");
 
-                    const tipo = data.tipoEstado;
+                        const texto =
+                            document.getElementById("textoEstado");
 
-                    if (tipo === "alert") {
-                        contenedor.className = "status-alert";
-                        icono.style.display = "inline-block";
+                        const titulo =
+                            document.getElementById("tituloEstado");
 
-                        titulo.innerText = "ALERTA";
-                    } else {
-                        contenedor.className = "status-ok";
-                        icono.style.display = "none";
+                        const icono =
+                            document.getElementById("iconoEstado");
 
-                        titulo.innerText = "INFORMACIÓN";
-                    }
-                })
-                .catch(err => {
-                    document.getElementById("contenedorEstado").className = "status-alert";
-                    document.getElementById("textoEstado").innerText = "Error de conexión";
-                });
-        }
+                        texto.innerText = data.estado;
 
-        function guardarConfig() {
-            let temp = document.getElementById("tempMax").value;
-            let hum = document.getElementById("humMin").value;
-            fetch(`/config?temp=${temp}&hum=${hum}`)
-                .then(() => alert("Configuración actualizada"));
-        }
+                        if (data.tipoEstado === "alert") {
+                            contenedor.className = "status-alert";
+                            icono.style.display  = "inline-block";
+                            titulo.innerText     = "ALERTA";
+                        } else {
+                            contenedor.className = "status-ok";
+                            icono.style.display  = "none";
+                            titulo.innerText     = "INFORMACIÓN";
+                        }
+                    })
 
-        setInterval(actualizarDatos, 2000);
-        actualizarDatos();
-    </script>
-</body>
+                    .catch(() => {
+                        document.getElementById("contenedorEstado").className =
+                            "status-alert";
 
+                        document.getElementById("textoEstado").innerText =
+                            "Error de conexión";
+                    });
+            }
+
+            // ACTUALIZAR PARAMS DESDE ESP32
+            function sincronizarParams() {
+                // No sobreescribir si el usuario está escribiendo
+                if (camposEnFoco > 0) return;
+
+                fetch('/params')
+                    .then(res => res.json())
+                    .then(data => {
+
+                        const inputTemp =
+                            document.getElementById("tempMax");
+
+                        const inputHum =
+                            document.getElementById("humMin");
+
+                        // Solo actualiza si el valor cambió
+                        if (inputTemp.value != data.tempMax) {
+                            inputTemp.value = data.tempMax;
+                        }
+
+                        if (inputHum.value != data.humedadMin) {
+                            inputHum.value = data.humedadMin;
+                        }
+                    })
+
+                    .catch(() => {});
+            }
+
+            // GUARDAR CONFIG
+            function guardarConfig() {
+                let temp = document.getElementById("tempMax").value;
+                let hum  = document.getElementById("humMin").value;
+
+                fetch(`/config?temp=${temp}&hum=${hum}`)
+                    .then(() => {
+                        alert("Configuración actualizada");
+                    });
+            }
+
+            // Iniciar loops
+            setInterval(actualizarDatos,    2000);
+            setInterval(sincronizarParams,  5000);
+
+            // Primera carga
+            actualizarDatos();
+            sincronizarParams();
+        </script>
+    </body>
 </html>
